@@ -98,20 +98,6 @@ select {
   min-width: 0;
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--red), #ff4b5c 46%, var(--navy) 48%);
-  border-radius: 8px;
-  font-weight: 900;
-  font-size: 26px;
-  line-height: 1;
-  box-shadow: 0 12px 24px rgba(231, 25, 47, 0.24);
-}
-
 .brand-text {
   display: grid;
   gap: 1px;
@@ -166,10 +152,8 @@ select {
   gap: 12px;
 }
 
-.language,
+.language-toggle,
 .menu-button {
-  border: 0;
-  background: transparent;
   color: var(--ink);
   display: inline-flex;
   align-items: center;
@@ -179,15 +163,35 @@ select {
   cursor: pointer;
 }
 
-.language {
+.language-toggle {
+  min-height: 40px;
+  padding: 0 13px;
+  border: 1px solid rgba(8, 22, 47, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.7);
   font-size: 13px;
+  white-space: nowrap;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.language-toggle:hover {
+  background: #fff;
+  border-color: rgba(231, 25, 47, 0.34);
+  transform: translateY(-1px);
+}
+
+.mobile-language {
+  display: none;
 }
 
 .menu-button {
   display: none;
+  border: 1px solid var(--line);
   width: 42px;
   height: 42px;
-  border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
 }
@@ -325,9 +329,10 @@ select {
   margin: 0;
   max-width: 680px;
   color: var(--ink);
-  font-size: clamp(50px, 7.1vw, 96px);
-  line-height: 0.96;
+  font-size: clamp(48px, 6.7vw, 90px);
+  line-height: 1.02;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
 }
 
 .hero h1 span {
@@ -975,10 +980,6 @@ select {
   top: 108px;
 }
 
-.contact-english {
-  margin-top: 14px !important;
-}
-
 .mail-link {
   display: inline-flex;
   align-items: center;
@@ -1213,7 +1214,7 @@ select {
   }
 
   .desktop-nav,
-  .language,
+  .desktop-language,
   .header-cta {
     display: none;
   }
@@ -1254,6 +1255,19 @@ select {
     font-weight: 850;
   }
 
+  .mobile-panel .language-toggle {
+    width: 100%;
+    min-height: 46px;
+    justify-content: flex-start;
+    padding: 0 12px;
+    background: #fbfdff;
+    box-shadow: none;
+  }
+
+  .mobile-language {
+    display: inline-flex;
+  }
+
   .hero {
     align-items: start;
     padding-top: 108px;
@@ -1281,7 +1295,7 @@ select {
   }
 
   .hero h1 {
-    font-size: clamp(50px, 14vw, 92px);
+    font-size: clamp(34px, 9.5vw, 54px);
   }
 
   .hero-metrics {
@@ -1320,12 +1334,6 @@ select {
 }
 
 @media (max-width: 680px) {
-  .brand-mark {
-    width: 38px;
-    height: 38px;
-    font-size: 23px;
-  }
-
   .brand-text strong {
     font-size: 19px;
   }
@@ -1354,7 +1362,7 @@ select {
   }
 
   .section h2 {
-    font-size: clamp(34px, 11vw, 52px);
+    font-size: clamp(30px, 8.5vw, 44px);
   }
 
   .reason-grid,
