@@ -94,7 +94,7 @@ select {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 0;
   min-width: 0;
 }
 
@@ -118,7 +118,7 @@ select {
 }
 
 .brand-text strong {
-  font-size: 22px;
+  font-size: 23px;
   letter-spacing: 0;
   line-height: 1;
 }
@@ -310,7 +310,7 @@ select {
 }
 
 .hero-content {
-  width: min(720px, 100%);
+  width: min(680px, 100%);
   padding-top: 16px;
 }
 
@@ -323,10 +323,10 @@ select {
 
 .hero h1 {
   margin: 0;
-  max-width: 710px;
+  max-width: 680px;
   color: var(--ink);
-  font-size: clamp(54px, 8.6vw, 120px);
-  line-height: 0.93;
+  font-size: clamp(50px, 7.1vw, 96px);
+  line-height: 0.96;
   letter-spacing: 0;
 }
 
@@ -555,7 +555,7 @@ select {
 
 .collection-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   width: min(1180px, 100%);
   margin: 20px auto 0;
@@ -740,6 +740,19 @@ select {
   right: 6px;
 }
 
+.workflow-node span {
+  inset: 3px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 30%, #fff 0 10%, transparent 12%),
+    linear-gradient(135deg, var(--red), var(--blue));
+}
+
+.workflow-node span::before,
+.workflow-node span::after {
+  display: none;
+}
+
 .story-steps {
   position: absolute;
   left: 24px;
@@ -823,6 +836,18 @@ select {
   font-weight: 800;
   font-size: 13px;
   box-shadow: 0 10px 28px rgba(9, 30, 66, 0.06);
+}
+
+.company-fact-list span {
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  line-height: 1.45;
+}
+
+.company-fact-list strong {
+  flex: 0 0 170px;
+  color: var(--ink);
 }
 
 .capability {
@@ -930,8 +955,9 @@ select {
   display: block;
   margin-top: 10px;
   color: #fff;
-  font-size: clamp(24px, 3.6vw, 42px);
+  font-size: clamp(22px, 3vw, 36px);
   line-height: 1.1;
+  overflow-wrap: anywhere;
 }
 
 .contact {
@@ -947,6 +973,10 @@ select {
 .contact-copy {
   position: sticky;
   top: 108px;
+}
+
+.contact-english {
+  margin-top: 14px !important;
 }
 
 .mail-link {
@@ -1015,6 +1045,47 @@ select {
   font-size: 14px;
   font-weight: 800;
   line-height: 1.45;
+}
+
+.contact-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: clamp(22px, 3vw, 36px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.contact-item {
+  min-height: 118px;
+  padding: 20px;
+  border: 1px solid rgba(8, 22, 47, 0.1);
+  border-radius: 8px;
+  background: #fbfdff;
+}
+
+.contact-item span {
+  display: block;
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.contact-item strong,
+.contact-item a {
+  display: block;
+  margin-top: 16px;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 850;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.contact-item a:hover {
+  color: var(--red);
 }
 
 .inquiry-form input:focus,
@@ -1124,7 +1195,7 @@ select {
 
   .collection-grid,
   .capability-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .story {
@@ -1290,7 +1361,8 @@ select {
   .collection-grid,
   .capability-grid,
   .story-steps,
-  .inquiry-form {
+  .inquiry-form,
+  .contact-details {
     grid-template-columns: 1fr;
   }
 
@@ -1322,6 +1394,14 @@ select {
 
   .inquiry-form .full {
     grid-column: auto;
+  }
+
+  .company-fact-list strong {
+    flex-basis: 100%;
+  }
+
+  .company-fact-list span {
+    flex-wrap: wrap;
   }
 }
 

@@ -1,8 +1,8 @@
-# Yistar Global Website
+# Yixing Retail Website
 
-Official independent website prototype for Ningbo Yistar Internet Retail Co., Ltd.
+Official website for Ningbo Yixing Internet Retail Co., Ltd.
 
-The site presents Yistar as a global cross-border ecommerce supplier of toy car collections, with animated brand storytelling, product category sections, OEM/ODM positioning, global market messaging, and an inquiry form UI.
+The site presents verified company information, business scope, and contact details for internet retail, mobile application development, cross-border e-commerce tools, and digital software services.
 
 ## Tech Stack
 
