@@ -30,10 +30,11 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command:
-      "npm run build && npm run preview -- --host 127.0.0.1 --port 4321",
+    command: "npm run build && node tests/serve-static.mjs",
     url: "http://127.0.0.1:4321",
     reuseExistingServer: !process.env.CI,
+    stdout: "pipe",
+    stderr: "pipe",
     timeout: 120_000,
   },
 });
