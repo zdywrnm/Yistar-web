@@ -1,0 +1,52 @@
+---
+interface Step {
+  title: string;
+  body: string;
+}
+
+interface Props {
+  steps: Step[];
+}
+
+const { steps } = Astro.props;
+const icons = [
+  `<path d="M21 6L7 20l7-3 3 7L31 10l-10-4Z"/><path d="m14 17 7-7"/>`,
+  `<circle cx="19" cy="19" r="4"/><path d="M19 15V5M19 33V23M15 19H5M33 19H23M16 16 9 9M29 29l-7-7M22 16l7-7M9 29l7-7"/>`,
+  `<path d="M10 5h15l5 5v23H10z"/><path d="M25 5v6h6M15 18h10M15 23h7"/><path d="m22 29 3 3 6-7"/>`,
+  `<path d="M31 17a12 12 0 0 0-20-7l-3 3"/><path d="M8 6v7h7M7 21a12 12 0 0 0 20 7l3-3"/><path d="M30 32v-7h-7"/>`,
+];
+---
+
+<ol class="process-flow">
+  {
+    steps.map((step, index) => (
+      <li class="process-step">
+        <div class="process-step__top">
+          <span class="process-step__icon" aria-hidden="true">
+            <svg viewBox="0 0 38 38" fill="none">
+              <g
+                set:html={icons[index]}
+                stroke="currentColor"
+                stroke-width="1.3"
+                stroke-linecap="square"
+                stroke-linejoin="miter"
+              />
+            </svg>
+          </span>
+          {index < steps.length - 1 && (
+            <svg
+              class="process-step__arrow"
+              viewBox="0 0 80 16"
+              aria-hidden="true"
+            >
+              <path d="M0 8H76M69 1l7 7-7 7" />
+            </svg>
+          )}
+        </div>
+        <span class="process-step__number">0{index + 1}</span>
+        <h3>{step.title}</h3>
+        <p>{step.body}</p>
+      </li>
+    ))
+  }
+</ol>

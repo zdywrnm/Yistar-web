@@ -1,0 +1,181 @@
+---
+import ArrowIcon from "../ArrowIcon.astro";
+import {
+  pathFor,
+  productOrder,
+  productPath,
+  products,
+  shared,
+  type Locale,
+} from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+  alternatePath: string;
+}
+
+const { locale, alternatePath } = Astro.props;
+const copy = shared[locale];
+const homePath = pathFor(locale);
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="wordmark" href={homePath} aria-label={`${copy.brand} · ${locale === "en" ? "Home" : "首页"}`}>
+      {copy.brand}
+    </a>
+
+    <nav class="desktop-nav" aria-label={locale === "en" ? "Primary navigation" : "主导航"}>
+      <details class="product-menu">
+        <summary>{copy.nav.products}</summary>
+        <div class="product-menu__panel">
+          <a href={`${homePath}#products`}>{copy.nav.overview}</a>
+          {
+            productOrder.map((slug) => (
+              <a href={productPath(locale, slug)}>
+                <span>{products[slug][locale].name}</span>
+                <span class="product-menu__stage">
+                  {copy.stages[products[slug][locale].stage]}
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </details>
+      <a href={`${homePath}#technology`}>{copy.nav.technology}</a>
+      <a href={pathFor(locale, "/careers/")}>{copy.nav.careers}</a>
+      <a href={alternatePath} lang={locale === "en" ? "zh-CN" : "en"}>
+        {copy.nav.language}
+      </a>
+      <a class="button button--header" href={pathFor(locale, "/contact/")}>
+        <span>{copy.nav.contact}</span>
+        <ArrowIcon size={17} />
+      </a>
+    </nav>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-toggle
+      data-open-label={copy.nav.menu}
+      data-close-label={copy.nav.close}
+      aria-label={copy.nav.menu}
+    >
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <nav
+    class="mobile-nav"
+    id="mobile-menu"
+    aria-label={locale === "en" ? "Mobile navigation" : "移动导航"}
+    data-mobile-menu
+  >
+    <div class="mobile-nav__inner">
+      <div class="mobile-nav__section">
+        <a class="mobile-nav__lead" href={`${homePath}#products`}>
+          {copy.nav.products}
+        </a>
+        {
+          productOrder.map((slug) => (
+            <a class="mobile-nav__product" href={productPath(locale, slug)}>
+              <span>{products[slug][locale].name}</span>
+              <span>{copy.stages[products[slug][locale].stage]}</span>
+            </a>
+          ))
+        }
+      </div>
+      <a href={`${homePath}#technology`}>{copy.nav.technology}</a>
+      <a href={pathFor(locale, "/careers/")}>{copy.nav.careers}</a>
+      <a href={alternatePath} lang={locale === "en" ? "zh-CN" : "en"}>
+        {copy.nav.language}
+      </a>
+      <a class="button mobile-nav__cta" href={pathFor(locale, "/contact/")}>
+        <span>{copy.nav.contact}</span>
+        <ArrowIcon />
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const mobileMenu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+  const productMenu = document.querySelector<HTMLDetailsElement>(".product-menu");
+  const backgroundRegions = [
+    document.querySelector<HTMLElement>(".skip-link"),
+    document.querySelector<HTMLElement>("main"),
+    document.querySelector<HTMLElement>("footer"),
+  ].filter((region): region is HTMLElement => Boolean(region));
+
+  const setMenuState = (open: boolean) => {
+    if (!header || !toggle || !mobileMenu) return;
+    header.classList.toggle("menu-is-open", open);
+    document.documentElement.classList.toggle("menu-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute(
+      "aria-label",
+      open
+        ? toggle.dataset.closeLabel || "Close menu"
+        : toggle.dataset.openLabel || "Open menu",
+    );
+    backgroundRegions.forEach((region) => {
+      if (open) {
+        region.setAttribute("inert", "");
+      } else {
+        region.removeAttribute("inert");
+      }
+    });
+    if (!open) toggle.focus({ preventScroll: true });
+  };
+
+  toggle?.addEventListener("click", () => {
+    setMenuState(toggle.getAttribute("aria-expanded") !== "true");
+  });
+
+  mobileMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setMenuState(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+
+    if (toggle?.getAttribute("aria-expanded") === "true") {
+      setMenuState(false);
+      return;
+    }
+
+    if (productMenu?.open) {
+      productMenu.open = false;
+      productMenu.querySelector<HTMLElement>("summary")?.focus({ preventScroll: true });
+    }
+  });
+
+  productMenu?.addEventListener("focusout", () => {
+    window.setTimeout(() => {
+      if (!productMenu.contains(document.activeElement)) {
+        productMenu.open = false;
+      }
+    }, 0);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      productMenu?.open &&
+      event.target instanceof Node &&
+      !productMenu.contains(event.target)
+    ) {
+      productMenu.open = false;
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 960 && toggle?.getAttribute("aria-expanded") === "true") {
+      setMenuState(false);
+    }
+  });
+</script>

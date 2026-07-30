@@ -1,0 +1,269 @@
+---
+import ArrowIcon from "../ArrowIcon.astro";
+import BaseLayout from "../layout/BaseLayout.astro";
+import NetworkLine from "../visuals/NetworkLine.astro";
+import NexusDiagram from "../visuals/NexusDiagram.astro";
+import TradeNetwork from "../visuals/TradeNetwork.astro";
+import {
+  CONTACT_EMAIL,
+  pathFor,
+  productOrder,
+  productPath,
+  products,
+  shared,
+  type Locale,
+  type ProductSlug,
+} from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+  slug: ProductSlug;
+}
+
+const { locale, slug } = Astro.props;
+const copy = shared[locale];
+const product = products[slug][locale];
+const canonicalPath = productPath(locale, slug);
+const alternatePath = productPath(locale === "en" ? "zh-CN" : "en", slug);
+const inquirySubject =
+  locale === "en"
+    ? `[YiStar Product Inquiry] ${product.name}`
+    : `[YiStar 产品交流] ${product.name}`;
+const inquiryHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(inquirySubject)}`;
+---
+
+<BaseLayout
+  locale={locale}
+  title={product.metaTitle}
+  description={product.metaDescription}
+  canonicalPath={canonicalPath}
+  alternatePath={alternatePath}
+>
+  <section class:list={["product-hero", `product-hero--${slug}`, "page-shell"]}>
+    <div class="product-hero__copy">
+      <p class="product-identity">
+        <span>{product.name}</span>
+        {product.shortName && <span>{product.shortName}</span>}
+      </p>
+      <h1 class:list={[product.heroTitleLines && "product-hero__title--segmented"]}>
+        {
+          product.heroTitleLines
+            ? product.heroTitleLines.map((line) => <span>{line}</span>)
+            : product.heroTitle
+        }
+      </h1>
+      <p class="product-hero__summary">{product.summary}</p>
+      <div class="button-row">
+        {
+          product.externalLinks?.map((link, index) => (
+            <a
+              class:list={[index === 0 ? "button" : "text-link"]}
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>{link.label}</span>
+              <ArrowIcon />
+            </a>
+          ))
+        }
+        {
+          !product.externalLinks && (
+            <a class="button" href={inquiryHref}>
+              <span>{product.contactLabel}</span>
+              <ArrowIcon />
+            </a>
+          )
+        }
+      </div>
+    </div>
+    <aside class="product-hero__stage" aria-label={copy.common.currentStage}>
+      <p>{copy.common.currentStage}</p>
+      <strong>{copy.stages[product.stage]}</strong>
+      <span>
+        {locale === "en"
+          ? "The wording on this page follows this verified stage."
+          : "本页所有表述均以该阶段为边界。"}
+      </span>
+    </aside>
+    <NetworkLine variant={slug === "star-nexus" ? "burst" : "corner"} />
+  </section>
+
+  <section class="product-overview page-shell section-rule">
+    <div class="product-overview__copy">
+      <p class="section-index">01 / {product.name}</p>
+      <h2>{product.overviewTitle}</h2>
+      <p>{product.overviewBody}</p>
+    </div>
+
+    {
+      slug === "openacad" && (
+        <div class="acad-proof">
+          <div class="acad-proof__brand">
+            <img
+              src="/assets/products/paperbanana-logo.svg"
+              alt="PaperBanana"
+              width="512"
+              height="512"
+              loading="lazy"
+            />
+            <div>
+              <span>OpenAcad / PaperBanana</span>
+              <strong>{product.proofTitle}</strong>
+            </div>
+          </div>
+          <div class="acad-proof__screen">
+            <img
+              src="/assets/products/paperbanana-desktop.jpg"
+              alt={product.imageAlt}
+              width="1440"
+              height="900"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+          <p class="media-caption">{product.proofBody}</p>
+        </div>
+      )
+    }
+
+    {slug === "opentrad" && <TradeNetwork locale={locale} />}
+
+    {
+      slug === "openvac" && (
+        <figure class="openvac-proof">
+          <img
+            src="/assets/products/openvac-scene.jpg"
+            alt={product.imageAlt}
+            width="1586"
+            height="992"
+            loading="eager"
+            decoding="async"
+          />
+          <figcaption>{product.caption}</figcaption>
+        </figure>
+      )
+    }
+
+    {slug === "star-nexus" && <NexusDiagram locale={locale} />}
+  </section>
+
+  <section class="product-focus page-shell section-rule">
+    <div class="section-heading section-heading--split">
+      <h2>{product.focusTitle}</h2>
+      <p>
+        {locale === "en"
+          ? "Clear boundaries matter as much as ambition."
+          : "清晰的阶段边界，与长期愿景同样重要。"}
+      </p>
+    </div>
+    <ol class="focus-list">
+      {
+        product.focusItems.map((item, index) => (
+          <li>
+            <span class="focus-list__index">0{index + 1}</span>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  {
+    slug === "openacad" && (
+      <section class="acad-platforms page-shell section-rule">
+        <div class="acad-platforms__copy">
+          <p class="section-index">
+            02 / {locale === "en" ? "Product progress" : "产品进展"}
+          </p>
+          <h2>
+            {locale === "en"
+              ? "From a working product to more useful surfaces"
+              : "从真实产品，走向更多可用形态"}
+          </h2>
+          <p>
+            {locale === "en"
+              ? "The mobile interface is being prepared for App Store submission. This preview is evidence of product work, not a release claim."
+              : "移动端界面正在准备上架 App Store。这里展示的是产品研发进展，不代表已经发布。"}
+          </p>
+        </div>
+        <div class="acad-platforms__visual">
+          <img
+            src="/assets/products/paperbanana-mobile.jpg"
+            alt={
+              locale === "en"
+                ? "PaperBanana mobile interface preparing for App Store submission"
+                : "正在准备上架 App Store 的 PaperBanana 移动端界面"
+            }
+            width="552"
+            height="1200"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="acad-platforms__tuyan">
+            <img
+              src="/assets/products/tuyan-logo.png"
+              alt="tuyan"
+              width="256"
+              height="256"
+              loading="lazy"
+            />
+            <span>
+              {locale === "en" ? "tuyan mini program" : "小程序 tuyan"}
+            </span>
+            <strong>{locale === "en" ? "In use" : "已投入使用"}</strong>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="product-stage-map page-shell section-rule" aria-labelledby="stage-map-title">
+    <div class="section-heading section-heading--split">
+      <h2 id="stage-map-title">
+        {locale === "en" ? "One portfolio, distinct stages" : "同一产品矩阵，不同发展阶段"}
+      </h2>
+      <p>
+        {locale === "en"
+          ? "The visual order never implies equal maturity."
+          : "统一技术方向，不等于相同成熟度。"}
+      </p>
+    </div>
+    <ol>
+      {
+        productOrder.map((itemSlug, index) => {
+          const item = products[itemSlug][locale];
+          return (
+            <li class:list={[itemSlug === slug && "is-current"]}>
+              <span>0{index + 1}</span>
+              <a href={productPath(locale, itemSlug)}>{item.name}</a>
+              <strong>{copy.stages[item.stage]}</strong>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </section>
+
+  <section class="product-cta page-shell section-rule">
+    <div>
+      <p class="section-index">03 / {copy.nav.contact}</p>
+      <h2>
+        {locale === "en"
+          ? "Bring us a real professional problem"
+          : "带来一个真实的专业问题"}
+      </h2>
+      <p>
+        {locale === "en"
+          ? "We welcome conversations grounded in actual work, constraints, and users."
+          : "我们欢迎从真实工作、真实约束与真实用户出发的交流。"}
+      </p>
+      <a class="button" href={pathFor(locale, "/contact/")}>
+        <span>{product.contactLabel}</span>
+        <ArrowIcon />
+      </a>
+    </div>
+    <NetworkLine variant="corner" />
+  </section>
+</BaseLayout>

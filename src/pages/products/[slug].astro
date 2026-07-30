@@ -1,0 +1,15 @@
+---
+import ProductPage from "../../components/pages/ProductPage.astro";
+import { productOrder, type ProductSlug } from "../../lib/site";
+
+export function getStaticPaths() {
+  return productOrder.map((slug) => ({
+    params: { slug },
+    props: { slug },
+  }));
+}
+
+const { slug } = Astro.props as { slug: ProductSlug };
+---
+
+<ProductPage locale="zh-CN" slug={slug} />

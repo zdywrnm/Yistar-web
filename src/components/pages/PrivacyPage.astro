@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layout/BaseLayout.astro";
+import {
+  CONTACT_EMAIL,
+  pathFor,
+  privacy,
+  type Locale,
+} from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const page = privacy[locale];
+const canonicalPath = pathFor(locale, "/privacy/");
+const alternatePath = pathFor(locale === "en" ? "zh-CN" : "en", "/privacy/");
+---
+
+<BaseLayout
+  locale={locale}
+  title={page.metaTitle}
+  description={page.metaDescription}
+  canonicalPath={canonicalPath}
+  alternatePath={alternatePath}
+>
+  <article class="privacy-page page-shell">
+    <header>
+      <h1>{page.title}</h1>
+      <p>{page.updated}</p>
+      <p class="privacy-page__lead">{page.lead}</p>
+    </header>
+    <div class="privacy-page__sections">
+      {
+        page.sections.map((section, index) => (
+          <section>
+            <span>0{index + 1}</span>
+            <div>
+              <h2>{section.title}</h2>
+              <p>{section.body}</p>
+              {index === page.sections.length - 1 && (
+                <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              )}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </article>
+</BaseLayout>

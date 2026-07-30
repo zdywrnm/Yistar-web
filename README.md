@@ -1,15 +1,11 @@
-# Yixing Retail Website
+# YiStar Technology Website
 
-Official website for Ningbo Yixing Internet Retail Co., Ltd.
+Official bilingual website for 宁波义星科技有限公司 / YiStar Technology.
 
-The site presents verified company information, business scope, and contact details for internet retail, mobile application development, cross-border e-commerce tools, and digital software services.
-
-## Tech Stack
-
-- React
-- Vite
-- CSS
-- lucide-react icons
+The site is a static Astro project with Chinese default routes and matching
+English routes under `/en/`. Product maturity is modeled explicitly so
+in-use, development, pre-development, and concept-stage work cannot be
+presented as equivalent.
 
 ## Development
 
@@ -18,14 +14,18 @@ npm install
 npm run dev
 ```
 
-## Production Build
+## Verification
 
 ```bash
-npm run build
+npm run verify
+npm run test:e2e
 ```
 
-## Project Structure
+`npm run verify` runs Astro checks, unit tests, and a production build. Browser
+tests cover localized routes, navigation, responsive behavior, and the
+client-side email handoff.
 
-- `src/main.jsx`: page components and interaction logic
-- `src/styles.css`: visual system, layout, responsive styles, and animations
-- `public/assets/`: generated product and brand imagery
+## Deployment
+
+Pushing `main` triggers the GitHub Pages workflow. It publishes `dist/` and
+retains the custom domain configured in `public/CNAME`.

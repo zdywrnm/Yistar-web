@@ -1,0 +1,61 @@
+---
+import type { Locale } from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+  compact?: boolean;
+}
+
+const { locale, compact = false } = Astro.props;
+const labels =
+  locale === "en"
+    ? {
+        models: "Models",
+        nexus: "Star Nexus",
+        capabilities: "Shared capabilities",
+        products: ["OpenAcad", "OpenTrad", "OpenVac"],
+        sources: ["Model A", "Model B", "Model C"],
+      }
+    : {
+        models: "模型资源",
+        nexus: "Star Nexus",
+        capabilities: "可复用模型能力",
+        products: ["OpenAcad", "OpenTrad", "OpenVac"],
+        sources: ["模型 A", "模型 B", "模型 C"],
+      };
+const statusLabel =
+  locale === "en"
+    ? "Concept-stage architecture"
+    : "概念规划架构示意";
+---
+
+<div class:list={["nexus-diagram", compact && "nexus-diagram--compact"]}>
+  <span class="nexus-diagram__status">{statusLabel}</span>
+  <div class="nexus-diagram__column nexus-diagram__sources">
+    <span class="diagram-label">{labels.models}</span>
+    {labels.sources.map((label) => <span class="diagram-node">{label}</span>)}
+  </div>
+
+  <svg class="nexus-diagram__links" viewBox="0 0 100 300" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 46L100 150M0 150H100M0 254L100 150" />
+    <circle cx="100" cy="150" r="4" />
+  </svg>
+
+  <div class="nexus-diagram__core">
+    <span class="diagram-label">{labels.capabilities}</span>
+    <strong>{labels.nexus}</strong>
+    <span class="nexus-diagram__coreline"></span>
+  </div>
+
+  <svg class="nexus-diagram__links" viewBox="0 0 100 300" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 150L100 46M0 150H100M0 150L100 254" />
+    <circle cx="0" cy="150" r="4" />
+  </svg>
+
+  <div class="nexus-diagram__column nexus-diagram__products">
+    <span class="diagram-label">
+      {locale === "en" ? "Industry products" : "行业产品"}
+    </span>
+    {labels.products.map((label) => <span class="diagram-node">{label}</span>)}
+  </div>
+</div>

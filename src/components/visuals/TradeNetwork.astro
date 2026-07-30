@@ -1,0 +1,40 @@
+---
+import type { Locale } from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<figure class="trade-network">
+  <svg viewBox="0 0 720 320" role="img" aria-labelledby="trade-network-title">
+    <title id="trade-network-title">
+      {locale === "en"
+        ? "Conceptual connection diagram for global trade work"
+        : "外贸工作连接关系概念示意"}
+    </title>
+    <path class="trade-network__base" d="M38 182C90 116 148 108 208 138s109 19 157-18 98-33 151 10 112 55 166 7" />
+    <path class="trade-network__link" d="M86 176L239 91L378 156L545 76L650 154" />
+    <path class="trade-network__link" d="M86 176L296 237L378 156L575 222" />
+    <g class="trade-network__nodes">
+      <circle cx="86" cy="176" r="7" />
+      <circle cx="239" cy="91" r="6" />
+      <circle cx="296" cy="237" r="6" />
+      <circle cx="378" cy="156" r="8" />
+      <circle cx="545" cy="76" r="6" />
+      <circle cx="575" cy="222" r="6" />
+      <circle cx="650" cy="154" r="7" />
+    </g>
+    <g class="trade-network__ticks">
+      <path d="M52 270H668" />
+      <path d="M86 264V276M239 264V276M378 264V276M545 264V276M650 264V276" />
+    </g>
+  </svg>
+  <figcaption>
+    {locale === "en"
+      ? "A conceptual view of information and task connections, not a released product interface."
+      : "信息与任务连接关系概念示意，并非已发布产品界面。"}
+  </figcaption>
+</figure>

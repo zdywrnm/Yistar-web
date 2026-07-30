@@ -1,0 +1,116 @@
+---
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import "../../styles/global.css";
+import { SITE_URL, shared, type Locale } from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  canonicalPath: string;
+  alternatePath?: string;
+  noIndex?: boolean;
+}
+
+const {
+  locale,
+  title,
+  description,
+  canonicalPath,
+  alternatePath,
+  noIndex = false,
+} = Astro.props;
+
+const copy = shared[locale];
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? SITE_URL).toString();
+const alternateUrl = alternatePath
+  ? new URL(alternatePath, Astro.site ?? SITE_URL).toString()
+  : undefined;
+const headerAlternatePath =
+  alternatePath ?? (locale === "en" ? "/" : "/en/");
+const ogImage = new URL("/assets/og-yistar.jpg", Astro.site ?? SITE_URL).toString();
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: "宁波义星科技有限公司",
+      alternateName: "YiStar Technology",
+      url: SITE_URL,
+      email: "zhaodingyi@yixingretail.cn",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "YiStar Technology",
+      inLanguage: ["zh-CN", "en"],
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={copy.lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content={description} />
+    {noIndex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonicalUrl} />
+    {
+      alternateUrl && (
+        <>
+          <link
+            rel="alternate"
+            hreflang="zh-CN"
+            href={locale === "zh-CN" ? canonicalUrl : alternateUrl}
+          />
+          <link
+            rel="alternate"
+            hreflang="en"
+            href={locale === "en" ? canonicalUrl : alternateUrl}
+          />
+          <link
+            rel="alternate"
+            hreflang="x-default"
+            href={locale === "zh-CN" ? canonicalUrl : alternateUrl}
+          />
+        </>
+      )
+    }
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="YiStar Technology" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale === "en" ? "en_US" : "zh_CN"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <title>{title}</title>
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(schema)}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">
+      {locale === "en" ? "Skip to content" : "跳到主要内容"}
+    </a>
+    <Header locale={locale} alternatePath={headerAlternatePath} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

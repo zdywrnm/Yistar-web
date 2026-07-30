@@ -1,0 +1,116 @@
+---
+import ArrowIcon from "../ArrowIcon.astro";
+import BaseLayout from "../layout/BaseLayout.astro";
+import NetworkLine from "../visuals/NetworkLine.astro";
+import {
+  CONTACT_EMAIL,
+  careers,
+  pathFor,
+  type Locale,
+} from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const page = careers[locale];
+const canonicalPath = pathFor(locale, "/careers/");
+const alternatePath = pathFor(locale === "en" ? "zh-CN" : "en", "/careers/");
+const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(page.mailSubject)}`;
+---
+
+<BaseLayout
+  locale={locale}
+  title={page.metaTitle}
+  description={page.metaDescription}
+  canonicalPath={canonicalPath}
+  alternatePath={alternatePath}
+>
+  <section class="careers-hero page-shell">
+    <div class="careers-hero__copy">
+      <h1>{page.title}</h1>
+      <h2>{page.subtitle}</h2>
+      <p>{page.intro}</p>
+    </div>
+    <NetworkLine variant="burst" />
+  </section>
+
+  <section class="careers-principles page-shell section-rule">
+    <div class="section-heading">
+      <h2>{page.workTitle}</h2>
+    </div>
+    <ol>
+      {
+        page.principles.map((principle, index) => (
+          <li>
+            <span>0{index + 1}</span>
+            <h3>{principle.title}</h3>
+            <p>{principle.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="careers-directions page-shell section-rule">
+    <div class="section-heading section-heading--split">
+      <h2>{page.directionsTitle}</h2>
+      <p>
+        {locale === "en"
+          ? "Different disciplines, connected by a commitment to real work."
+          : "不同专业方向，由真实工作与长期价值连接。"}
+      </p>
+    </div>
+    <div class="direction-list">
+      {
+        page.directions.map((direction, index) => (
+          <div>
+            <svg viewBox="0 0 56 56" aria-hidden="true">
+              {index === 0 && (
+                <>
+                  <circle cx="28" cy="28" r="18" />
+                  <circle cx="28" cy="28" r="4" />
+                  <path d="M28 10v36M10 28h36M15 15l26 26M41 15 15 41" />
+                </>
+              )}
+              {index === 1 && (
+                <>
+                  <path d="M10 20 28 10l18 10v22L28 52 10 42Z" />
+                  <path d="m10 20 18 10 18-10M28 30v22" />
+                </>
+              )}
+              {index === 2 && (
+                <>
+                  <rect x="10" y="10" width="36" height="36" />
+                  <path d="M22 10v36M34 10v36M10 22h36M10 34h36" />
+                  <circle cx="28" cy="28" r="3" />
+                </>
+              )}
+              {index === 3 && (
+                <>
+                  <circle cx="28" cy="28" r="20" />
+                  <ellipse cx="28" cy="28" rx="9" ry="20" />
+                  <path d="M8 28h40M12 18h32M12 38h32" />
+                </>
+              )}
+            </svg>
+            <span>0{index + 1}</span>
+            <h3>{direction}</h3>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="careers-cta page-shell section-rule">
+    <div>
+      <h2>{page.ctaTitle}</h2>
+      <a class="button" href={mailto}>
+        <span>{page.ctaLabel}</span>
+        <ArrowIcon />
+      </a>
+    </div>
+    <NetworkLine variant="corner" />
+  </section>
+</BaseLayout>

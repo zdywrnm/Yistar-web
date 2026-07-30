@@ -1,0 +1,114 @@
+---
+import ArrowIcon from "../ArrowIcon.astro";
+import ProductMatrix from "../ProductMatrix.astro";
+import BaseLayout from "../layout/BaseLayout.astro";
+import NetworkLine from "../visuals/NetworkLine.astro";
+import NexusDiagram from "../visuals/NexusDiagram.astro";
+import ProcessFlow from "../visuals/ProcessFlow.astro";
+import {
+  CONTACT_EMAIL,
+  careers,
+  home,
+  pathFor,
+  shared,
+  type Locale,
+} from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = shared[locale];
+const page = home[locale];
+const canonicalPath = pathFor(locale);
+const alternatePath = locale === "en" ? "/" : "/en/";
+const careersCopy = careers[locale];
+---
+
+<BaseLayout
+  locale={locale}
+  title={page.metaTitle}
+  description={page.metaDescription}
+  canonicalPath={canonicalPath}
+  alternatePath={alternatePath}
+>
+  <section class="home-hero page-shell">
+    <div class="home-hero__content">
+      <h1>
+        <span>{page.heroTitle[0]}</span>
+        <span>{page.heroTitle[1]}</span>
+      </h1>
+      <p>{page.heroBody}</p>
+      <div class="button-row">
+        <a class="button" href="#products">
+          <span>{copy.common.exploreProducts}</span>
+          <ArrowIcon />
+        </a>
+        <a class="text-link text-link--hero" href="#method">
+          <span>{copy.common.about}</span>
+          <ArrowIcon />
+        </a>
+      </div>
+    </div>
+    <div class="home-hero__visual">
+      <NetworkLine variant="hero" />
+    </div>
+  </section>
+
+  <ProductMatrix locale={locale} />
+
+  <section class="method-section page-shell section-rule" id="method">
+    <div class="section-heading section-heading--split">
+      <h2>{page.methodTitle}</h2>
+      <p>{page.methodIntro}</p>
+    </div>
+    <ProcessFlow steps={page.methodSteps} />
+  </section>
+
+  <section class="technology-section page-shell section-rule" id="technology">
+    <div class="technology-section__copy">
+      <h2>
+        <span>{page.technologyTitle[0]}</span>
+        <span>{page.technologyTitle[1]}</span>
+      </h2>
+      <p>{page.technologyBody}</p>
+      <div class="vision-note">
+        <span>{page.visionLabel}</span>
+        <p>{page.visionBody}</p>
+      </div>
+    </div>
+    <NexusDiagram locale={locale} compact />
+  </section>
+
+  <section class="home-careers page-shell section-rule">
+    <div class="home-careers__copy">
+      <p class="section-index">01 / {copy.nav.careers}</p>
+      <h2>{page.careersTitle}</h2>
+      <p>{page.careersBody}</p>
+      <a class="text-link" href={pathFor(locale, "/careers/")}>
+        <span>{careersCopy.ctaLabel}</span>
+        <ArrowIcon />
+      </a>
+    </div>
+    <NetworkLine variant="corner" />
+  </section>
+
+  <section class="home-contact page-shell section-rule">
+    <div>
+      <p class="section-index">02 / {copy.nav.contact}</p>
+      <h2>{page.contactTitle}</h2>
+      <p>{page.contactBody}</p>
+      <div class="button-row">
+        <a class="button" href={pathFor(locale, "/contact/")}>
+          <span>{copy.common.businessContact}</span>
+          <ArrowIcon />
+        </a>
+        <a class="contact-email-link" href={`mailto:${CONTACT_EMAIL}`}>
+          {CONTACT_EMAIL}
+        </a>
+      </div>
+    </div>
+    <NetworkLine variant="corner" />
+  </section>
+</BaseLayout>

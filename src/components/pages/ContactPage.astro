@@ -1,0 +1,295 @@
+---
+import ArrowIcon from "../ArrowIcon.astro";
+import BaseLayout from "../layout/BaseLayout.astro";
+import NetworkLine from "../visuals/NetworkLine.astro";
+import {
+  CONTACT_EMAIL,
+  contact,
+  pathFor,
+  shared,
+  type Locale,
+} from "../../lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = shared[locale];
+const page = contact[locale];
+const canonicalPath = pathFor(locale, "/contact/");
+const alternatePath = pathFor(locale === "en" ? "zh-CN" : "en", "/contact/");
+---
+
+<BaseLayout
+  locale={locale}
+  title={page.metaTitle}
+  description={page.metaDescription}
+  canonicalPath={canonicalPath}
+  alternatePath={alternatePath}
+>
+  <section class="contact-page page-shell">
+    <div class="contact-intro">
+      <p class="section-index">CONTACT / BUSINESS INQUIRY</p>
+      <h1>{page.title}</h1>
+      <h2>{page.subtitle}</h2>
+      <NetworkLine variant="corner" />
+      <p>{page.intro}</p>
+      <div class="contact-intro__email">
+        <span>{copy.common.directEmail}</span>
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+      </div>
+    </div>
+
+    <form
+      class="contact-form"
+      data-contact-form
+      data-locale={locale}
+      data-required-error={page.errors.required}
+      data-email-error={page.errors.email}
+      data-consent-error={page.errors.consent}
+      data-copy-error={page.errors.copy}
+      novalidate
+    >
+      <div class="form-field">
+        <label for="cooperation">
+          {page.labels.cooperation}<span aria-hidden="true">•</span>
+        </label>
+        <select id="cooperation" name="cooperationType" required>
+          <option value="">{page.placeholders.cooperation}</option>
+          {page.cooperationOptions.map((option) => <option value={option}>{option}</option>)}
+        </select>
+        <p class="form-error" id="cooperation-error" data-error-for="cooperation"></p>
+      </div>
+
+      <div class="form-field">
+        <label for="name">{page.labels.name}<span aria-hidden="true">•</span></label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          maxlength="80"
+          placeholder={page.placeholders.name}
+          required
+        />
+        <p class="form-error" id="name-error" data-error-for="name"></p>
+      </div>
+
+      <div class="form-field">
+        <label for="organization">
+          {page.labels.organization}<span aria-hidden="true">•</span>
+        </label>
+        <input
+          id="organization"
+          name="organization"
+          type="text"
+          autocomplete="organization"
+          maxlength="120"
+          placeholder={page.placeholders.organization}
+          required
+        />
+        <p class="form-error" id="organization-error" data-error-for="organization"></p>
+      </div>
+
+      <div class="form-field">
+        <label for="email">{page.labels.email}<span aria-hidden="true">•</span></label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          maxlength="254"
+          placeholder={page.placeholders.email}
+          required
+        />
+        <p class="form-error" id="email-error" data-error-for="email"></p>
+      </div>
+
+      <div class="form-field">
+        <label for="product">{page.labels.product}<span aria-hidden="true">•</span></label>
+        <select id="product" name="product" required>
+          <option value="">{page.placeholders.product}</option>
+          {page.productOptions.map((option) => <option value={option}>{option}</option>)}
+        </select>
+        <p class="form-error" id="product-error" data-error-for="product"></p>
+      </div>
+
+      <div class="form-field">
+        <label for="details">{page.labels.details}<span aria-hidden="true">•</span></label>
+        <textarea
+          id="details"
+          name="details"
+          rows="6"
+          maxlength="500"
+          placeholder={page.placeholders.details}
+          required
+        ></textarea>
+        <p class="form-error" id="details-error" data-error-for="details"></p>
+      </div>
+
+      <div class="form-consent">
+        <input id="consent" name="consent" type="checkbox" required />
+        <label for="consent">
+          {
+            locale === "en" ? (
+              <>
+                I have read and accept the{" "}
+                <a href={pathFor(locale, "/privacy/")}>privacy notice</a>, and
+                agree to generate a pre-filled email containing this
+                information.
+              </>
+            ) : (
+              <>
+                我已阅读并同意
+                <a href={pathFor(locale, "/privacy/")}>隐私说明</a>
+                ，同意生成包含以上信息的预填邮件。
+              </>
+            )
+          }
+        </label>
+        <p class="form-error" id="consent-error" data-error-for="consent"></p>
+      </div>
+
+      <button class="button contact-form__submit" type="submit">
+        <span>{page.labels.submit}</span>
+        <ArrowIcon />
+      </button>
+      <p class="contact-form__note">{page.labels.fallback}</p>
+
+      <div class="mail-fallback" data-mail-fallback hidden>
+        <p aria-live="polite" data-mail-status></p>
+        <button class="text-link mail-fallback__copy" type="button" data-copy-mail>
+          <span>{page.labels.copy}</span>
+          <ArrowIcon />
+        </button>
+        <textarea
+          data-mail-preview
+          readonly
+          aria-label={locale === "en" ? "Generated email content" : "已生成的邮件内容"}
+        ></textarea>
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+      </div>
+    </form>
+  </section>
+
+  <section class="contact-process page-shell section-rule" aria-label={locale === "en" ? "How the form works" : "表单工作方式"}>
+    <ol>
+      {
+        page.process.map((step, index) => (
+          <li>
+            <span>{index + 1}</span>
+            <div>
+              <h2>{step.title}</h2>
+              <p>{step.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</BaseLayout>
+
+<script>
+  import { buildBusinessEmail, buildBusinessMailto } from "../../lib/mailto";
+  import type { Locale } from "../../lib/site";
+
+  const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+  const fallback = document.querySelector<HTMLElement>("[data-mail-fallback]");
+  const preview = document.querySelector<HTMLTextAreaElement>("[data-mail-preview]");
+  const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-mail]");
+  const status = document.querySelector<HTMLElement>("[data-mail-status]");
+
+  const showError = (field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, message = "") => {
+    const error = document.querySelector<HTMLElement>(`[data-error-for="${field.id}"]`);
+    field.setAttribute("aria-invalid", message ? "true" : "false");
+    field.setAttribute("aria-describedby", `${field.id}-error`);
+    if (error) error.textContent = message;
+  };
+
+  const validateField = (field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement) => {
+    if (!form) return true;
+    const requiredMessage = form.dataset.requiredError || "Please complete this field.";
+    const emailMessage = form.dataset.emailError || "Enter a valid email.";
+    const consentMessage = form.dataset.consentError || requiredMessage;
+    let message = "";
+
+    if (field instanceof HTMLInputElement && field.type === "checkbox" && !field.checked) {
+      message = consentMessage;
+    } else if (!field.value.trim()) {
+      message = requiredMessage;
+    } else if (field instanceof HTMLInputElement && field.type === "email" && field.validity.typeMismatch) {
+      message = emailMessage;
+    } else if (field instanceof HTMLTextAreaElement && field.value.trim().length < 10) {
+      message = requiredMessage;
+    }
+
+    showError(field, message);
+    return !message;
+  };
+
+  const fields = form
+    ? Array.from(
+        form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+          "input[required], select[required], textarea[required]",
+        ),
+      )
+    : [];
+
+  fields.forEach((field) => {
+    field.addEventListener("blur", () => validateField(field));
+    field.addEventListener("input", () => {
+      if (field.getAttribute("aria-invalid") === "true") validateField(field);
+    });
+    field.addEventListener("change", () => {
+      if (field.getAttribute("aria-invalid") === "true") validateField(field);
+    });
+  });
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const valid = fields.map(validateField).every(Boolean);
+    if (!valid) {
+      fields.find((field) => field.getAttribute("aria-invalid") === "true")?.focus();
+      return;
+    }
+
+    const data = new FormData(form);
+    const inquiry = {
+      locale: (form.dataset.locale || "zh-CN") as Locale,
+      cooperationType: String(data.get("cooperationType") || ""),
+      name: String(data.get("name") || ""),
+      organization: String(data.get("organization") || ""),
+      email: String(data.get("email") || ""),
+      product: String(data.get("product") || ""),
+      details: String(data.get("details") || ""),
+      pageUrl: window.location.href,
+    };
+    const email = buildBusinessEmail(inquiry);
+    const generatedText = `${email.subject}\n\n${email.body}`;
+
+    if (preview) preview.value = generatedText;
+    if (fallback) fallback.hidden = false;
+    if (status) status.textContent = "";
+    window.location.href = buildBusinessMailto(inquiry);
+  });
+
+  copyButton?.addEventListener("click", async () => {
+    if (!form || !preview) return;
+    try {
+      await navigator.clipboard.writeText(preview.value);
+      if (status) {
+        status.textContent =
+          form.dataset.locale === "en"
+            ? "Email content copied."
+            : "已复制邮件内容。";
+      }
+    } catch {
+      preview.hidden = false;
+      preview.focus();
+      preview.select();
+      if (status) status.textContent = form.dataset.copyError || "";
+    }
+  });
+</script>

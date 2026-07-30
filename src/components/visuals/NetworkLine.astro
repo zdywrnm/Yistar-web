@@ -1,0 +1,104 @@
+---
+interface Props {
+  variant?: "hero" | "rail" | "corner" | "burst";
+  class?: string;
+}
+
+const { variant = "hero", class: className } = Astro.props;
+---
+
+{
+  variant === "hero" && (
+    <svg
+      class:list={["network-line", "network-line--hero", className]}
+      viewBox="0 0 620 500"
+      preserveAspectRatio="xMidYMid meet"
+      aria-hidden="true"
+    >
+      <g class="network-line__paths">
+        <path d="M39 43H126L165 82" />
+        <path d="M245 164H358L426 232" />
+        <path d="M426 232L604 410" />
+        <path d="M426 232L540 232" />
+        <path d="M426 232L520 120" />
+      </g>
+      <g class="network-line__nodes">
+        <circle cx="39" cy="43" r="4" />
+        <circle cx="245" cy="164" r="4" />
+        <circle cx="426" cy="232" r="5" />
+        <circle cx="604" cy="410" r="4" />
+        <circle cx="540" cy="232" r="3.5" />
+        <circle cx="520" cy="120" r="3.5" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  variant === "rail" && (
+    <svg
+      class:list={["network-line", "network-line--rail", className]}
+      viewBox="0 0 920 84"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M4 42H208L262 14H472L526 70H736L790 42H916" />
+      <g class="network-line__nodes">
+        <circle cx="4" cy="42" r="4" />
+        <circle cx="208" cy="42" r="4" />
+        <circle cx="262" cy="14" r="4" />
+        <circle cx="472" cy="14" r="4" />
+        <circle cx="526" cy="70" r="4" />
+        <circle cx="736" cy="70" r="4" />
+        <circle cx="790" cy="42" r="4" />
+        <circle cx="916" cy="42" r="4" />
+      </g>
+    </svg>
+  )
+}
+
+{
+  variant === "corner" && (
+    <svg
+      class:list={["network-line", "network-line--corner", className]}
+      viewBox="0 0 420 180"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M8 26H144L410 170" />
+      <circle cx="8" cy="26" r="4" />
+      <circle cx="144" cy="26" r="5" />
+      <circle cx="410" cy="170" r="4" />
+    </svg>
+  )
+}
+
+{
+  variant === "burst" && (
+    <svg
+      class:list={["network-line", "network-line--burst", className]}
+      viewBox="0 0 560 340"
+      aria-hidden="true"
+    >
+      <g class="network-line__paths">
+        <path d="M284 174L60 58" />
+        <path d="M284 174L26 198" />
+        <path d="M284 174L164 314" />
+        <path d="M284 174L296 22" />
+        <path d="M284 174L514 52" />
+        <path d="M284 174L536 198" />
+        <path d="M284 174L432 318" />
+      </g>
+      <g class="network-line__nodes">
+        <circle cx="284" cy="174" r="7" />
+        <circle cx="60" cy="58" r="4" />
+        <circle cx="26" cy="198" r="4" />
+        <circle cx="164" cy="314" r="4" />
+        <circle cx="296" cy="22" r="4" />
+        <circle cx="514" cy="52" r="4" />
+        <circle cx="536" cy="198" r="4" />
+        <circle cx="432" cy="318" r="4" />
+      </g>
+    </svg>
+  )
+}
